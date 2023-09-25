@@ -11,7 +11,8 @@ struct Node{
 void printList(Node *start);
 int countNode(Node *start);
 void insertNode(Node* &start, char data, int index);
-void deleteNode(Node *start, int index);
+bool isEmpty(Node* start);
+void deleteNode(Node* &start, int index);
 
 int main()
 {
@@ -33,8 +34,19 @@ int main()
     // Here index of node starts from 0(zero)
 
     printList(start);
-    insertNode(start, 'D', 1);
+    insertNode(start, 'D', 0);
     printList(start);
+    insertNode(start, 'Z', 3);
+    printList(start);
+    insertNode(start, 'X', 5);
+    printList(start);
+    deleteNode(start, 5);
+    printList(start);
+    deleteNode(start, 2);
+    printList(start);
+    deleteNode(start, 0);
+    printList(start);
+
 
     
 
@@ -76,7 +88,7 @@ void insertNode(Node* &start, char data, int index){
         cout << "INDEX OUT OF RANGE" << endl;
         return;
     }
-    else if(countNode(start) == 0){
+    if(countNode(start) == 0){
         start = newNode;
         newNode -> ptr = nullptr;
     }
@@ -100,10 +112,36 @@ void insertNode(Node* &start, char data, int index){
         start = newNode;
     }
 }
-void deleteNode(Node *start, int index){
+bool isEmpty(Node* start){
     if(start == nullptr){
-        cout << "THERE IS NO NODES" << endl;
+        return true;
+    }
+    return false;
+}
+void deleteNode(Node* &start, int index){
+    Node *current = start;
+    if(isEmpty(start)){
+        cout << "NOTHING TO DELETE" << endl;
         return;
     }
-    
+    if(index == countNode(start)-1){
+        for(int i = 0; i < index-1; i++){
+            current = current -> ptr;
+        }
+        delete current -> ptr;
+        current -> ptr = nullptr;
+    }
+    else if (index < countNode(start) && index > 0){
+        for(int i = 0; i < index-1; i++){
+            current = current -> ptr;
+        }
+        current -> ptr = current -> ptr -> ptr;
+    }
+    else if (index == 0){
+        start = start -> ptr;
+        delete current;
+    }
+    else {
+        cout << "INDEX NOT VALID" << endl;
+    }
 }
